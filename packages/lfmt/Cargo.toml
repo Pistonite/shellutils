@@ -1,0 +1,16 @@
+[package]
+name = "lfmt"
+description = "format line endings"
+license = "MIT"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+cu = { workspace = true, features = ["cli", "fs", "coroutine-heavy"] }
+ignore = "0.4.25"
+tokio = "1"
+
+[[bin]]
+name = "lfmt"
+path = "main.rs"

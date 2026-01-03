@@ -1,0 +1,28 @@
+version: '3'
+
+includes:
+  common:
+    taskfile: ./packages/mono-dev/task/common.yaml
+    flatten: true
+    optional: true
+
+  lfmt:           { taskfile: ./packages/lfmt,               dir: ./packages/lfmt,               internal: true }
+  vipath:         { taskfile: ./packages/vipath,             dir: ./packages/vipath,             internal: true }
+  which:          { taskfile: ./packages/which,              dir: ./packages/which,              internal: true }
+  win-envedit:    { taskfile: ./packages/win-envedit,        dir: ./packages/win-envedit,        internal: true }
+  wsclip:         { taskfile: ./packages/wsclip,             dir: ./packages/wsclip,             internal: true }
+
+tasks:
+  install:
+    - rm -rf packages/mono-dev
+    - mkdir -p packages
+    - git clone https://github.com/Pistonight/mono-dev --depth 1 packages/mono-dev
+  check:
+    - task: lfmt:check
+    - task: vipath:check
+    - task: which:check
+    - task: win-envedit:check
+    - task: wsclip:check
+    - cargo run --bin lfmt -- -c
+    - lisensor
+

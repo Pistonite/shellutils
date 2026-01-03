@@ -1,0 +1,14 @@
+[workspace]
+resolver = "2"
+members = [
+    "packages/lfmt",
+    "packages/vipath",
+    "packages/which",
+    "packages/win-envedit",
+    "packages/wsclip"
+]
+
+[workspace.dependencies.cu]
+package = "pistonite-cu"
+version = "0.6.8"
+

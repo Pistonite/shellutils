@@ -1,0 +1,15 @@
+[package]
+name = "which"
+description = "Crossplatform which"
+license = "MIT"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+clap = { version = "4.5.20", features = ["derive"] }
+which = "6.0.3"
+
+[[bin]]
+path = "main.rs"
+name = "which"
