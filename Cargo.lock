@@ -925,7 +925,7 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 
 [[package]]
 name = "vipath"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "pistonite-cu",
  "win-envedit",
@@ -958,7 +958,7 @@ dependencies = [
 
 [[package]]
 name = "which"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "clap",
  "which 6.0.3",
@@ -989,7 +989,7 @@ dependencies = [
 
 [[package]]
 name = "win-envedit"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "pistonite-cu",
  "winreg",
@@ -1190,7 +1190,7 @@ checksum = "f17a85883d4e6d00e8a97c586de764dabcc06133f7f1d55dce5cdc070ad7fe59"
 
 [[package]]
 name = "wsclip"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "clipboard-win",
  "ctrlc",

@@ -2,7 +2,7 @@
 name = "vipath"
 description = "Simple tool for editing PATH environment on Windows in a text file"
 license = "MIT"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 publish = false
 
