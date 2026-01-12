@@ -1,2 +1,2 @@
 [Pistonite]
-"./**/*.rs" = "MIT"
+"./packages/**/*.rs" = "MIT"
