@@ -16,7 +16,7 @@ pub struct Cli {
 }
 
 pub fn run(cli: Cli) -> cu::Result<()> {
-    cu::disable_print_time();
+    cu::lv::disable_print_time();
     let path = cu::check!(temp_file_path(), "failed to determine temporary file path")?;
     // clean up previous temp file
     if path.is_file() {

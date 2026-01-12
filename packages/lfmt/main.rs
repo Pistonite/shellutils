@@ -140,7 +140,7 @@ async fn main(args: Cli) -> cu::Result<()> {
             if quieter_check {
                 std::process::exit(1);
             }
-            cu::bailfyi!("found files that need formatting");
+            cu::bail!("found files that need formatting");
         }
         cu::info!("check ok");
     }

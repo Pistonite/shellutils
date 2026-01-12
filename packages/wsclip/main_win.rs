@@ -158,7 +158,7 @@ pub fn run(cli: Cli) -> cu::Result<()> {
     }
     let _ = accepting_thread.join();
     cu::info!("server closed");
-    cu::disable_print_time();
+    cu::lv::disable_print_time();
     Ok(())
 }
 
