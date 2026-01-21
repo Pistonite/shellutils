@@ -13,6 +13,10 @@ shell-words = "1.1.1"
 [lib]
 path = "lib.rs"
 
+[[bin]]
+name = "viopen"
+path = "main.rs"
+
 [features]
 default = []
 print = ["cu/print"]

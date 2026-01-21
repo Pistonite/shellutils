@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Pistonite
+
 use std::path::Path;
 
 mod imp;
