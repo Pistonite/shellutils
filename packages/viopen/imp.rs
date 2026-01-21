@@ -371,6 +371,7 @@ mod macros {
             ]))
         }};
     }
+    #[cfg(windows)]
     pub(crate) use make_powershell_command;
 
     #[cfg(windows)]
@@ -388,6 +389,7 @@ mod macros {
             ]))
         }};
     }
+    #[cfg(windows)]
     pub(crate) use make_powershell_wait_command;
 }
 use macros::*;
