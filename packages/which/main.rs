@@ -35,7 +35,15 @@ fn main() -> ExitCode {
 
 fn print_error(programname: &str, e: which::Error) -> ExitCode {
     let paths = std::env::var("PATH").unwrap_or_default();
-    eprintln!("which: no {programname} in ({paths}): {e:?}");
+
+    let mut error_string = format!(": {e}");
+    // clear the error string for the most common error for same output
+    // as unix
+    if error_string == ": cannot find binary path" {
+        error_string.clear()
+    }
+
+    eprintln!("which: no {programname} in ({paths}){error_string}");
     ExitCode::FAILURE
 }
 
