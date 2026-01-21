@@ -2,13 +2,14 @@
 name = "vipath"
 description = "Simple tool for editing PATH environment on Windows in a text file"
 license = "MIT"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 publish = false
 
 [target.'cfg(windows)'.dependencies]
-cu = { workspace = true, features = ["cli", "process"] }
+cu = { workspace = true, features = ["cli"] }
 win-envedit.path = "../win-envedit"
+viopen.path = "../viopen"
 
 [[bin]]
 name = "vipath"

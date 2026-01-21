@@ -40,10 +40,9 @@ pub fn run(cli: Cli) -> cu::Result<()> {
     )?;
 
     cu::check!(
-        start_edit_and_wait(&path),
+        viopen::open(&path),
         "unable to open temporary file in editor"
     )?;
-    cu::info!("applying changes...");
     cu::check!(apply_file(&path), "failed to apply temporary file")?;
     Ok(())
 }
@@ -151,49 +150,6 @@ fn clean_path(x: &str) -> Vec<&str> {
         out.push(s);
     }
     out
-}
-
-fn start_edit_and_wait(path: &Path) -> cu::Result<()> {
-    if let Ok(bin) = cu::which("nvim") {
-        return start_edit_and_wait_vim(path, &bin);
-    }
-    if let Ok(bin) = cu::which("vim") {
-        return start_edit_and_wait_vim(path, &bin);
-    }
-    if let Ok(bin) = cu::which("vi") {
-        return start_edit_and_wait_vim(path, &bin);
-    }
-    if let Ok(bin) = cu::which("code") {
-        return start_edit_and_wait_code(path, &bin);
-    }
-    if let Ok(bin) = cu::which("notepad") {
-        cu::warn!("cannot find compatible editor - falling back to notepad");
-        cu::warn!("please make the edit, then run `vipath -c` to apply the changes");
-        cu::check!(start_edit_notepad(path, &bin), "failed to launch notepad")?;
-    }
-    cu::bail!("no compatible editor");
-}
-fn start_edit_and_wait_vim(path: &Path, vim: &Path) -> cu::Result<()> {
-    cu::info!("waiting for vim to exit...");
-    let _ = vim
-        .command()
-        .arg(path)
-        .stdoe(cu::pio::inherit())
-        .stdin_inherit()
-        .wait()?;
-    Ok(())
-}
-fn start_edit_and_wait_code(path: &Path, code: &Path) -> cu::Result<()> {
-    cu::info!("waiting for vscode to exit...");
-    let _ = code
-        .command()
-        .add(cu::args!["--wait", path])
-        .all_null()
-        .wait()?;
-    Ok(())
-}
-fn start_edit_notepad(path: &Path, notepad: &Path) -> cu::Result<()> {
-    notepad.command().arg(path).all_null().wait_nz()
 }
 
 fn temp_file_path() -> cu::Result<PathBuf> {
