@@ -8,8 +8,8 @@ pub fn open_internal(editor: &str, file: &Path) -> cu::Result<()> {
     let file_str = get_checked_file_path(file)?;
     let editor = find_editor(editor)?;
     cu::check!(
-        spawn_editor(editor, file_str),
-        "failed to spawn editor command"
+        spawn_editor(editor.clone(), file_str.clone()),
+        "failed to spawn editor '{editor:?}' for file '{file_str}'"
     )
 }
 
@@ -18,8 +18,8 @@ pub async fn co_open_internal(editor: &str, file: &Path) -> cu::Result<()> {
     let file_str = get_checked_file_path(file)?;
     let editor = find_editor(editor)?;
     cu::check!(
-        co_spawn_editor(editor, file_str).await,
-        "failed to spawn editor command"
+        co_spawn_editor(editor.clone(), file_str.clone()).await,
+        "failed to spawn editor '{editor:?}' for file '{file_str}'"
     )
 }
 
@@ -158,13 +158,23 @@ fn find_editor_internal(editor: &str) -> cu::Result<EditorConfig> {
 }
 
 fn parse_editor(editor: &str) -> cu::Result<EditorConfig> {
+    // quick check
+    if editor == "viopen" {
+        cu::bail!("ignoring EDITOR=viopen");
+    }
     let args = cu::check!(shell_words::split(editor), "failed to split editor command")?;
 
     // +4 for additional args that will be added, like the file path
     let mut new_args = Vec::with_capacity(args.len() + 4);
     let mut args_iter = args.into_iter();
     let executable = cu::check!(args_iter.next(), "no executable found")?;
-    let executable = cu::which(&executable)?.into_utf8()?;
+    let executable = cu::which(&executable)?;
+    if let Some(x) = executable.file_stem() {
+        if x == "viopen" {
+            cu::bail!("ignoring EDITOR=viopen");
+        }
+    }
+    let executable = executable.into_utf8()?;
     let editor_type = guess_editor_type(&executable);
 
     match editor_type {
@@ -195,7 +205,7 @@ fn parse_editor(editor: &str) -> cu::Result<EditorConfig> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct EditorConfig {
     inherit: bool,
     executable: String,
