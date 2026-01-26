@@ -7,6 +7,7 @@ includes:
     optional: true
 
   lfmt:           { taskfile: ./packages/lfmt,               dir: ./packages/lfmt,               internal: true }
+  n:              { taskfile: ./packages/n,                  dir: ./packages/n,                  internal: true }
   viopen:         { taskfile: ./packages/viopen,             dir: ./packages/viopen,             internal: true }
   vipath:         { taskfile: ./packages/vipath,             dir: ./packages/vipath,             internal: true }
   which:          { taskfile: ./packages/which,              dir: ./packages/which,              internal: true }
@@ -20,6 +21,7 @@ tasks:
     - git clone https://github.com/Pistonight/mono-dev --depth 1 packages/mono-dev
   check:
     - task: lfmt:check
+    - task: n:check
     - task: viopen:check
     - task: vipath:check
     - task: which:check

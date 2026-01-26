@@ -32,7 +32,7 @@ pub fn run(cli: Cli) -> cu::Result<()> {
         let running = Arc::clone(&running);
         let attempted = AtomicBool::new(false);
         let client_address = format!("ws://127.0.0.1:{}", cli.port);
-        if let Err(e) = ctrlc::set_handler(move || {
+        if let Err(e) = cu::cli::add_global_ctrlc_handler(move || {
             // CAS probably not needed, just in case :)
             if attempted
                 .compare_exchange(false, true, Ordering::SeqCst, Ordering::SeqCst)
@@ -143,7 +143,10 @@ pub fn run(cli: Cli) -> cu::Result<()> {
         }
         if closed_index != connections.len() {
             let conn = connections.swap_remove(closed_index);
-            cu::info!("[{}] closed", conn.id);
+            if running.load(Ordering::Acquire) {
+                // don't print closed message after closing
+                cu::info!("[{}] closed", conn.id);
+            }
         }
         if connections.is_empty() && closed {
             break;
