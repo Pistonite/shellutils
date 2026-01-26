@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "packages/lfmt",
+    "packages/n",
     "packages/viopen",
     "packages/vipath",
     "packages/which",
@@ -11,5 +12,5 @@ members = [
 
 [workspace.dependencies.cu]
 package = "pistonite-cu"
-version = "0.7.1"
+version = "0.7.2"
 

@@ -1,0 +1,13 @@
+[package]
+name = "n"
+description = "Prints information about the number n"
+license = "MIT"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+
+[[bin]]
+path = "main.rs"
+name = "n"
