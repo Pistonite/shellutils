@@ -29,4 +29,6 @@ tasks:
     - task: wsclip:check
     - cargo run --bin lfmt -- -c
     - lisensor
+  test:
+    - task: wsclip:test
 

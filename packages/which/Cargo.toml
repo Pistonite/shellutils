@@ -7,7 +7,7 @@ edition = "2024"
 publish = false
 
 [dependencies]
-clap = { version = "4.5.55", features = ["derive"] }
+clap = { version = "4.5.57", features = ["derive"] }
 which = "8.0.0"
 
 [[bin]]

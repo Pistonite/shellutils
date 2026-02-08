@@ -48,10 +48,11 @@ fn spawn_editor(mut editor: EditorConfig, file: String) -> cu::Result<()> {
     editor.args.push(file);
     if editor.inherit {
         configure_command_io!(__inherit__ Path::new(&editor.executable).command().args(editor.args))
-            .wait_nz()
+            .wait()?;
     } else {
-        configure_command_io!(Path::new(&editor.executable).command().args(editor.args)).wait_nz()
+        configure_command_io!(Path::new(&editor.executable).command().args(editor.args)).wait()?;
     }
+    Ok(())
 }
 
 #[cfg(feature = "coroutine")]
@@ -71,13 +72,14 @@ async fn co_spawn_editor(mut editor: EditorConfig, file: String) -> cu::Result<(
     editor.args.push(file);
     if editor.inherit {
         configure_command_io!(__inherit__ Path::new(&editor.executable).command().args(editor.args))
-            .co_wait_nz()
-            .await
+            .co_wait()
+            .await?;
     } else {
         configure_command_io!(Path::new(&editor.executable).command().args(editor.args))
-            .co_wait_nz()
-            .await
+            .co_wait()
+            .await?;
     }
+    Ok(())
 }
 
 fn find_editor(editor: &str) -> cu::Result<EditorConfig> {
@@ -275,10 +277,11 @@ fn spawn_cmd_with_powershell(inherit: bool, executable: &str, args: &[String]) -
     // executable does not need to be escaped because windows paths can't contain quote so we are safe
     // (the input string must be a validated path)
     if inherit {
-        make_powershell_command!(__inherit__ executable, argument_list).wait_nz()
+        make_powershell_command!(__inherit__ executable, argument_list).wait()?;
     } else {
-        make_powershell_command!(executable, argument_list).wait_nz()
+        make_powershell_command!(executable, argument_list).wait()?;
     }
+    Ok(())
 }
 
 #[cfg(windows)]
@@ -293,27 +296,30 @@ async fn co_spawn_cmd_with_powershell(
     // (the input string must be a validated path)
     if inherit {
         make_powershell_command!(__inherit__ executable, argument_list)
-            .co_wait_nz()
-            .await
+            .co_wait()
+            .await?;
     } else {
         make_powershell_command!(executable, argument_list)
-            .co_wait_nz()
-            .await
+            .co_wait()
+            .await?;
     }
+    Ok(())
 }
 
 #[cfg(windows)]
 fn spawn_notepad_with_powershell(executable: &str, file: &str) -> cu::Result<()> {
     // both executable and file are valid windows paths
-    make_powershell_wait_command!(executable, file).wait_nz()
+    make_powershell_wait_command!(executable, file).wait()?;
+    Ok(())
 }
 
 #[cfg(all(windows, feature = "coroutine"))]
 async fn co_spawn_notepad_with_powershell(executable: &str, file: &str) -> cu::Result<()> {
     // both executable and file are valid windows paths
     make_powershell_wait_command!(executable, file)
-        .co_wait_nz()
-        .await
+        .co_wait()
+        .await?;
+    Ok(())
 }
 
 #[cfg(windows)]

@@ -170,8 +170,17 @@ fn set_clipboard_bytes(id: usize, bytes: &[u8]) {
         cu::error!("[{id}] failed to set clipboard: {e:?}");
     }
 }
-fn set_clipboard_bytes_internal(id: usize, mut bytes: &[u8]) -> cu::Result<()> {
+fn set_clipboard_bytes_internal(id: usize, bytes: &[u8]) -> cu::Result<()> {
     cu::debug!("[{id}] received {} bytes", bytes.len());
+    let utf8_content = decode_bytes(id, bytes)?;
+    cu::debug!("[{id}] decoded {} bytes, copying...", utf8_content.len());
+    if let Err(ec) = clipboard_win::set_clipboard(clipboard_win::formats::Unicode, &utf8_content) {
+        cu::bail!("failed to set clipboard: error code: {ec}");
+    }
+    Ok(())
+}
+
+fn decode_bytes(id: usize, mut bytes: &[u8]) -> cu::Result<String> {
     let mut line_count = 0;
     let mut utf8_content = String::new();
     loop {
@@ -183,6 +192,7 @@ fn set_clipboard_bytes_internal(id: usize, mut bytes: &[u8]) -> cu::Result<()> {
                 if null_i == 0 {
                     utf8_content.push('\n');
                     bytes = &bytes[1..];
+                    continue;
                 }
                 line_count += 1;
                 match str::from_utf8(&bytes[..null_i]) {
@@ -210,18 +220,25 @@ fn set_clipboard_bytes_internal(id: usize, mut bytes: &[u8]) -> cu::Result<()> {
             }
         }
     }
-    cu::debug!("[{id}] decoded {} bytes, copying...", utf8_content.len());
-    if let Err(ec) = clipboard_win::set_clipboard(clipboard_win::formats::Unicode, &utf8_content) {
-        cu::bail!("failed to set clipboard: error code: {ec}");
-    }
     cu::info!(
-        "[{id}] copied {line_count} lines ({} bytes)",
+        "[{id}] decoded {line_count} lines ({} bytes)",
         utf8_content.len()
     );
-    Ok(())
+    Ok(utf8_content)
 }
 
 struct Conn {
     id: usize,
     ws: WebSocket<TcpStream>,
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn test_decode() -> cu::Result<()> {
+        let bytes = b"foo\0\0bar";
+        assert_eq!(decode_bytes(0, bytes)?, "foo\n\nbar");
+        Ok(())
+    }
 }
