@@ -7,6 +7,6 @@ fn main() -> cu::Result<()> {
     // executable name
     let _ = args.next();
     // only support one file name for now
-    let file = cu::check!(args.next(), "need file name")?;
+    let file = cu::check!(args.next(), "expecting path")?;
     viopen::open(&file)
 }
